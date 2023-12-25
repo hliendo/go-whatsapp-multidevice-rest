@@ -1,0 +1,78 @@
+@baseUrl = http://10.10.10.254:3030/api/v1/whatsapp/
+
+###
+
+GET http://10.10.10.254:3030/api/v1/whatsapp/auth  HTTP/1.1
+Authorization: Basic admin:ThisIsPassword
+
+
+GET http://admin:ThisIsPassword@10.10.10.254:3030/api/v1/whatsapp/auth HTTP/1.1
+
+##
+
+POST http://10.10.10.254:3030/api/v1/whatsapp/login 
+
+
+# @description get json content
+GET https://httpbin.org/json
+
+# @name json
+GET https://httpbin.org/anything?id={{$guid}}
+
+# @ref json
+POST https://httpbin.org/anything
+{{json.args.id}}
+
+# @import ./name.http
+# @ref json
+POST https://httpbin.org/anything
+{{json.slideshow.author}}
+
+# Configuración de la autenticación
+
+GET http://admin:ThisIsPassword@10.10.10.254:3030/api/v1/whatsapp/auth
+Content-Type: application/json
+
+
+# Extracción del token de la respuesta
+$token = response.body.token
+
+# Uso del token para realizar otra solicitud
+POST http://10.10.10.254:3030/api/v1/whatsapp/login
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXQiOnsiamlkIjoiYWRtaW4ifSwiaWF0IjoxNzAzNDYwMjIzfQ.sIRBJaF5CseGauD3ee5aD3XLIqkz-76FaOlgWU3_He4
+
+
+Authorization: Bearer ThisIsJWTSecret
+
+$token
+
+
+# Uso del token para realizar otra solicitud
+GET http://10.10.10.254:3030/api/v1/whatsapp/login
+Authorization: Bearer $token
+
+
+
+@host=10.10.10.254
+@port=3030
+@resource=auth
+@username=admin
+@password=ThisIsPassword
+###
+GET http://{{username}}:{{password}}@{{host}}:{{port}}/api/v1/whatsapp/{{resource}}
+# Extracción del token de la respuesta
+$token = response.body.token
+
+### Send Message
+post http://{{host}}:{{port}}/api/v1/whatsapp/login
+Content-Type: multipart/form-data
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXQiOnsiamlkIjoiYWRtaW4ifSwiaWF0IjoxNzAzNDU1MjgxfQ.6wq72_FkcexC6wUoBvJmG61Xp1SoRvrI6ywd8k2qvcg
+
+
+### Status
+get http://10.10.10.254:3030/api/v1/whatsapp/
+Authorization: Bearer ThisIsJWTSecret
+
+###
+POST http://{{username}}:{{password}}@{{host}}:{{port}}/api/v1/whatsapp/login
+Authorization: Bearer ThisIsJWTSecret
