@@ -10,9 +10,14 @@ import (
 func Routines(cron *cron.Cron) {
 	log.Print(nil).Info("Running Routine Tasks")
 
+	// Routine Task for Checking WhatsAppClient Authentication Status cada 1 minuto
 	cron.AddFunc("0 * * * * *", func() {
 		// If WhatsAppClient Connection is more than 0
 		if len(pkgWhatsApp.WhatsAppClient) > 0 {
+
+			srtCount := string(len(pkgWhatsApp.WhatsAppClient))
+
+			log.Print(nil).Info("Checking WhatsApp Client " + srtCount + " Device(s) for Authentication")
 			// Check Every Authenticated MSISDN
 			for jid, client := range pkgWhatsApp.WhatsAppClient {
 				// Get Real JID from Datastore
@@ -22,7 +27,10 @@ func Routines(cron *cron.Cron) {
 				maskJID := realJID[0:len(realJID)-4] + "xxxx"
 
 				// Print Log Show Information of Device Chenking
-				log.Print(nil).Info("Checking WhatsApp Client for " + maskJID)
+				log.Print(nil).Info("Checking WhatsApp Client for         -> " + maskJID)
+				// Print Log Show Information of Device Chenking
+				log.Print(nil).Info("Checking WhatsApp Client for RealJID -> " + realJID)
+				log.Print(nil).Info("Checking WhatsApp Client for jid     -> " + jid)
 
 				// Check WhatsAppClient Registered JID with Authenticated MSISDN
 				if jid != realJID {
